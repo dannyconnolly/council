@@ -1,0 +1,45 @@
+composer create-project --prefer-dist laravel/laravel forum.local
+
+php artisan make:model Thread -mr
+
+php artisan migrate
+
+php artisan make:model Reply -mc
+
+php artisan migrate
+
+php artisan tinker
+
+	$threads = factory('App\Thread', 50)->create();
+	
+	$threads->each(function ($thread) { factory('App\Reply', 10)->create(['thread_id' => $thread->id]); });
+	
+phpunit
+
+php artisan make:test ReplyTest --unit
+
+phpunit tests/Unit/ReplyTest.php
+
+php artisan make:test ThreadTest --unit
+
+phpunit --filter a_thread_has_a_creator
+phpunit --filter a_user_can_filter_threads_by_popularity
+
+php artisan make:test ParticipateInForum
+
+phpunit --filter an_authenticated_user_may_only_favorite_a_reply_once
+phpunit --filter FavoritesTest
+
+php artisan make:test CreateThreadsTest
+
+composer dump-autoload
+
+php artisan make:model Channel -m
+
+php artisan make:controller FavoritesController
+
+php artisan make:migration create_favorites_table --create=favorites
+
+php artisan make:model Favorite
+
+php artisan make:controller ProfilesController
