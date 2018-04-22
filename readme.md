@@ -28,6 +28,8 @@ DB_PORT=3306
 DB_DATABASE=council
 DB_USERNAME=root
 DB_PASSWORD=
+
+Then, migrate your database to create tables.
 ```
 
 ### Step 3.
