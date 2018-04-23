@@ -41,8 +41,10 @@
             <img src="{{ $thread->creator->avatar_path }}" width="25" height="25" alt="{{ $thread->creator->name }}" class="mr-1" />
 
             <span class="flex">
-                <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a> posted: 
-                <span v-text="title"></span>
+                <a href="{{ route('profile', $thread->creator) }}">
+                    {{ $thread->creator->name }} ({{ $thread->creator->reputation }} XP)
+                </a> 
+                posted: <span v-text="title"></span>
             </span>
         </div><!-- /.level -->
     </div><!-- /.panel-heading -->
