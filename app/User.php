@@ -17,7 +17,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'avatar_path'
     ];
-    
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -41,8 +41,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the route key name for Laravel
-     * 
+     * Get the route key name for Laravel.
+     *
      * @return string
      */
     public function getRouteKeyName()
@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     /**
      * Get all activity for the user.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function activity()
@@ -83,17 +83,17 @@ class User extends Authenticatable
 
         $this->save();
     }
-    
+
     /**
      * Determine if the user is an administrator.
      *
      * @return bool
      */
-    public function isAdmin() 
+    public function isAdmin()
     {
         return in_array($this->email, config('council.administrators'));
     }
-    
+
     /**
      * Determine if the user is an administrator.
      *
@@ -120,7 +120,8 @@ class User extends Authenticatable
 
     public function getAvatarPathAttribute($avatar)
     {
-        $avatar_path = $avatar ? 'storage/' . $avatar : false;
+        $avatar_path = $avatar ? 'storage/'.$avatar : false;
+
         return asset($avatar_path ?: 'images/avatars/default.png');
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Thread;
 use App\Channel;
 use App\Trending;
 use App\Rules\Recaptcha;
-use App\Filters\ThreadFilters;
-use App\Thread;
 use Illuminate\Http\Request;
+use App\Filters\ThreadFilters;
 
 class ThreadsController extends Controller
 {
@@ -18,7 +18,7 @@ class ThreadsController extends Controller
     {
         $this->middleware('auth')->except(['index', 'show']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -64,7 +64,7 @@ class ThreadsController extends Controller
             'channel_id' => 'required|exists:channels,id',
             'g-recaptcha-response' => ['required', $recaptcha]
         ]);
-        
+
         $thread = Thread::create([
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
@@ -83,7 +83,7 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer  $channel
+     * @param  int  $channel
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
@@ -96,10 +96,10 @@ class ThreadsController extends Controller
         $trending->push($thread);
 
         $thread->increment('visits');
-        
+
         return view('threads.show', compact('thread'));
     }
-    
+
     /**
      * Delete the given thread.
      *
@@ -108,7 +108,7 @@ class ThreadsController extends Controller
      * @return mixed
      */
     public function destroy($channel, Thread $thread)
-    {   
+    {
         $this->authorize('update', $thread);
 
         $thread->delete();
@@ -139,14 +139,14 @@ class ThreadsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update($channel, Thread $thread)
-    {        
+    {
         $this->authorize('update', $thread);
-        
+
         $thread->update(request()->validate([
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
         ]));
-        
+
         return $thread;
     }
 
@@ -160,7 +160,7 @@ class ThreadsController extends Controller
     public function getThreads(Channel $channel, ThreadFilters $filters)
     {
         $threads = Thread::latest()->filter($filters);
-        
+
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }

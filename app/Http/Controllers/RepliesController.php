@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatePostRequest;
-use App\Thread;
 use App\Reply;
+use App\Thread;
+use App\Http\Requests\CreatePostRequest;
 
 class RepliesController extends Controller
 {
@@ -17,9 +17,9 @@ class RepliesController extends Controller
     }
 
     /**
-     * Fetch all relevant replies
-     * 
-     * @param integer   $channelId
+     * Fetch all relevant replies.
+     *
+     * @param int   $channelId
      * @param Thread    $thread
      */
     public function index($channelId, Thread $thread)
@@ -28,9 +28,9 @@ class RepliesController extends Controller
     }
 
     /**
-     * Persist a new reply
-     * 
-     * @param integer           $channelId
+     * Persist a new reply.
+     *
+     * @param int           $channelId
      * @param Thread            $thread
      * @param CreatePostForm    $form
      * @return \Illuminate\Database\Eloquent\Model
@@ -40,7 +40,7 @@ class RepliesController extends Controller
         if ($thread->locked) {
             return response('Thread is locked', 422);
         }
-        
+
         return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()

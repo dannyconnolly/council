@@ -6,7 +6,6 @@ use App\Channel;
 use App\Activity;
 use App\Favorite;
 use App\ThreadSubscription;
-
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -20,9 +19,9 @@ class SampleDataSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        
+
         $this->channels()->content();
-        
+
         Schema::enableForeignKeyConstraints();
     }
 
@@ -34,7 +33,7 @@ class SampleDataSeeder extends Seeder
         Channel::truncate();
 
         factory(Channel::class, 10)->create();
-        
+
         return $this;
     }
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Gate;
 use App\Exceptions\ThrottleException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 
 class CreatePostRequest extends FormRequest
 {
@@ -29,6 +29,7 @@ class CreatePostRequest extends FormRequest
     {
         throw new ThrottleException('Sorry, you are posting too frequently. Please take a break.');
     }
+
     /**
      * Get the validation rules that apply to the request.
      *

@@ -14,8 +14,8 @@ class Activity extends Model
     protected $guarded = [];
 
     /**
-     * Fetch the associated subject for the activity
-     * 
+     * Fetch the associated subject for the activity.
+     *
      * @return \Illminate\Database\Eloquent\Relations\MorphTo
      */
     public function subject()
@@ -37,7 +37,7 @@ class Activity extends Model
             ->with('subject')
             ->take($take)
             ->get()
-            ->groupBy(function ($activity){
+            ->groupBy(function ($activity) {
                 return $activity->created_at->format('Y-m-d');
             });
     }

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Favorite;
 use App\Reply;
-use Illuminate\Http\Request;
+use App\Favorite;
 
 class FavoritesController extends Controller
 {
     /**
-     * Create a new controller instance
+     * Create a new controller instance.
      */
     public function __construct()
     {

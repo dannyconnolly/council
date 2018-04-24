@@ -2,7 +2,6 @@
 
 namespace App\Inspections;
 
-
 class Spam
 {
     protected $inspections = [

@@ -2,8 +2,8 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
 use Zttp\Zttp;
+use Illuminate\Contracts\Validation\Rule;
 
 class Recaptcha implements Rule
 {
@@ -31,9 +31,9 @@ class Recaptcha implements Rule
            'response' => $value,
            'remoteip' => request()->ip()
         ]);
-        
+
         // dd($response);
-        
+
         return $response->json()['success'];
     }
 
@@ -46,7 +46,7 @@ class Recaptcha implements Rule
     {
         return 'The recaptcha verification failed. Try again.';
     }
-    
+
     /**
      * Is Recaptcha in test mode?
      * @method isInTestMode

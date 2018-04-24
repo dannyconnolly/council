@@ -10,8 +10,8 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can update a given profile
-     * 
+     * Determine whether the user can update a given profile.
+     *
      * @param \App\User $user
      * @param \App\User $signedInUser
      * @return mixed

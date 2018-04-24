@@ -2,25 +2,25 @@
 
 namespace App;
 
-use App\Events\ThreadReceivedNewReply;
-use App\Filters\ThreadFilters;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use App\Filters\ThreadFilters;
+use App\Events\ThreadReceivedNewReply;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Thread extends Model
 {
     use RecordsActivity, Searchable;
 
     /**
-     * Don't auto-apply mass assignment protection
-     * 
+     * Don't auto-apply mass assignment protection.
+     *
      * @var array
      */
     protected $guarded = [];
 
     /**
-     * The relationships to always eager-load
+     * The relationships to always eager-load.
      */
     protected $with = ['creator', 'channel'];
 
@@ -30,13 +30,13 @@ class Thread extends Model
      * @var array
      */
     protected $appends = ['isSubscribedTo'];
-    
+
     protected $casts = [
         'locked' => 'boolean'
     ];
 
     /**
-     * Boot the model
+     * Boot the model.
      */
     protected static function boot()
     {
@@ -44,20 +44,20 @@ class Thread extends Model
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
-            
+
             Reputation::reduce($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
         static::created(function ($thread) {
             $thread->update(['slug' => $thread->title]);
-            
+
             Reputation::award($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
     }
 
     /**
-     * Get a string path for the thread
-     * 
+     * Get a string path for the thread.
+     *
      * @ return string
      */
     public function path()
@@ -86,8 +86,8 @@ class Thread extends Model
     }
 
     /**
-     * Add a reply to the thread
-     * 
+     * Add a reply to the thread.
+     *
      * @param array $reply
      * @return Reply
      */
@@ -96,7 +96,7 @@ class Thread extends Model
         $reply = $this->replies()->create($reply);
 
         event(new ThreadReceivedNewReply($reply));
-        
+
         return $reply;
     }
 
@@ -122,9 +122,6 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
-    /**
-     * 
-     */
     public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
@@ -134,9 +131,6 @@ class Thread extends Model
         return $this;
     }
 
-    /**
-     * 
-     */
     public function unsubscribe($userId = null)
     {
         $this->subscriptions()
@@ -144,17 +138,11 @@ class Thread extends Model
             ->delete();
     }
 
-    /**
-     * 
-     */
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
     }
 
-    /**
-     * 
-     */
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()
@@ -164,9 +152,9 @@ class Thread extends Model
 
     /**
      * Determin if the thread has been updated since the user last read it.
-     * 
+     *
      * @param User $user
-     * @return boolean
+     * @return bool
      */
     public function hasUpdatesFor($user)
     {
@@ -185,24 +173,24 @@ class Thread extends Model
         $slug = str_slug($value);
 
         if (static::whereSlug($slug)->exists()) {
-            $slug = "{$slug}-" . $this->id;
+            $slug = "{$slug}-".$this->id;
         }
-        
+
         $this->attributes['slug'] = $slug;
     }
 
     public function markBestReply(Reply $reply)
     {
         $reply->thread->update(['best_reply_id' => $reply->id]);
-        
+
         Reputation::award($reply->owner, Reputation::BEST_REPLY_AWARDED);
     }
-    
+
     public function toSearchableArray()
     {
         return $this->toArray() + ['path' => $this->path()];
     }
-    
+
     public function getBodyAttribute($body)
     {
         return \Purify::clean($body);
