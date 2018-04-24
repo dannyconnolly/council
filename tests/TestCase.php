@@ -29,6 +29,17 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+    public function signInAdmin($admin = null)
+    {
+        $admin = $admin ?: create('App\User');
+
+        config(['council.administrators' => [ $admin->email ]]);
+        
+        $this->actingAs($admin);
+
+        return $this;
+    }
+    
     protected function disableExceptionHandling()
     {
         $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
