@@ -10,19 +10,19 @@ class Reply extends Model
     use Favoritable, RecordsActivity;
 
     /**
-     * Don't auto-apply mass assignment protection
-     * 
+     * Don't auto-apply mass assignment protection.
+     *
      * @var array
      */
     protected $guarded = [];
 
     /**
-     * The relations to eager load on every query
-     * 
+     * The relations to eager load on every query.
+     *
      * @var array
      */
     protected $with = ['owner', 'favorites'];
-    
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -34,22 +34,22 @@ class Reply extends Model
     {
         parent::boot();
 
-        static::created(function ($reply){
+        static::created(function ($reply) {
             $reply->thread->increment('replies_count');
-            
+
             Reputation::award($reply->owner, Reputation::REPLY_POSTED);
         });
 
-        static::deleted(function ($reply){
+        static::deleted(function ($reply) {
             $reply->thread->decrement('replies_count');
-            
+
             Reputation::reduce($reply->owner, Reputation::REPLY_POSTED);
         });
     }
-    
+
     /**
-     * A reply has an owner
-     * 
+     * A reply has an owner.
+     *
      * @return \Immuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function owner()
@@ -58,8 +58,8 @@ class Reply extends Model
     }
 
     /**
-     * A reply has a thread
-     * 
+     * A reply has a thread.
+     *
      * @return \Immuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function thread()
@@ -67,9 +67,6 @@ class Reply extends Model
         return $this->belongsTo(Thread::class);
     }
 
-    /**
-     * 
-     */
     public function wasJustPublished()
     {
         return $this->created_at->gt(Carbon::now()->subMinute());
@@ -82,7 +79,7 @@ class Reply extends Model
      */
     public function path()
     {
-        return $this->thread->path() . "#reply-{$this->id}";
+        return $this->thread->path()."#reply-{$this->id}";
     }
 
     public function mentionedUsers()
@@ -101,12 +98,12 @@ class Reply extends Model
     {
         return $this->thread->best_reply_id == $this->id;
     }
-    
-    public function getIsBestAttribute() 
+
+    public function getIsBestAttribute()
     {
         return $this->isBest();
     }
-    
+
     public function getBodyAttribute($body)
     {
         return \Purify::clean($body);

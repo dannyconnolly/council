@@ -21,27 +21,29 @@ class ReplyPolicy
     }
 
     /**
-     * Determine whether the user can update a reply
-     * 
+     * Determine whether the user can update a reply.
+     *
      * @param \App\User $user
      * @param \App\Reply $reply
      * @return mixed
      */
     public function update(User $user, Reply $reply)
     {
-        return $reply->user_id == $user->id; 
+        return $reply->user_id == $user->id;
     }
 
     /**
-     * Determine whether the user can create a reply
-     * 
+     * Determine whether the user can create a reply.
+     *
      * @param \App\User $user
      * @return mixed
      */
     public function create(User $user)
     {
-        if (! $lastReply = $user->fresh()->lastReply) return true;
+        if (! $lastReply = $user->fresh()->lastReply) {
+            return true;
+        }
 
-        return ! $lastReply->wasJustPublished(); 
+        return ! $lastReply->wasJustPublished();
     }
 }

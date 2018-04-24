@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
-use Illuminate\Http\Request;
 
 class ThreadSubscriptionsController extends Controller
 {
     /**
-     * Store a threads subscription
-     * 
-     * @param integer $channelId
+     * Store a threads subscription.
+     *
+     * @param int $channelId
      * @param Thread $thread
      * @return
      */
@@ -20,9 +19,9 @@ class ThreadSubscriptionsController extends Controller
     }
 
     /**
-     * Delete a threads subscription
-     * 
-     * @param integer $channelId
+     * Delete a threads subscription.
+     *
+     * @param int $channelId
      * @param Thread $thread
      * @return
      */

@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use \App\Channel;
-use Illuminate\Support\ServiceProvider;
+use App\Channel;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ( $this->app->isLocal() ) {
+        if ($this->app->isLocal()) {
             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         }
     }

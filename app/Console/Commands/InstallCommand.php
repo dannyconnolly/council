@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 
 class InstallCommand extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -26,7 +25,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    public function handle ()
+    public function handle()
     {
         $this->welcome();
 
@@ -35,7 +34,7 @@ class InstallCommand extends Command
         if (strlen(config('app.key')) === 0) {
             $this->call('key:generate');
 
-            $this->line("~ Secret key properly generated.");
+            $this->line('~ Secret key properly generated.');
         }
 
         $this->updateEnvironmentFile($this->requestDatabaseCredentials());
@@ -43,7 +42,7 @@ class InstallCommand extends Command
         if ($this->confirm('Do you want to migrate the database?', false)) {
             $this->call('migrate');
 
-            $this->line("~ Database successfully migrated.");
+            $this->line('~ Database successfully migrated.');
         }
 
         $this->goodbye();
@@ -55,7 +54,7 @@ class InstallCommand extends Command
      * @param  array $updatedValues
      * @return void
      */
-    protected function updateEnvironmentFile ($updatedValues)
+    protected function updateEnvironmentFile($updatedValues)
     {
         $envFile = $this->laravel->environmentFilePath();
 
@@ -69,17 +68,17 @@ class InstallCommand extends Command
     /**
      * Display the welcome message.
      */
-    protected function welcome ()
+    protected function welcome()
     {
-        $this->info(">> Welcome to the Council installation process! <<");
+        $this->info('>> Welcome to the Council installation process! <<');
     }
 
     /**
      * Display the completion message.
      */
-    protected function goodbye ()
+    protected function goodbye()
     {
-        $this->info(">> The installation process is complete. Enjoy your new forum! <<");
+        $this->info('>> The installation process is complete. Enjoy your new forum! <<');
     }
 
     /**
@@ -87,7 +86,7 @@ class InstallCommand extends Command
      *
      * @return array
      */
-    protected function requestDatabaseCredentials ()
+    protected function requestDatabaseCredentials()
     {
         return [
             'DB_DATABASE' => $this->ask('Database name'),
@@ -99,13 +98,12 @@ class InstallCommand extends Command
     /**
      * Create the initial .env file.
      */
-    protected function createEnvFile ()
+    protected function createEnvFile()
     {
-        if (!file_exists('.env')) {
+        if (! file_exists('.env')) {
             exec('cp .env.example .env');
 
-            $this->line(".env file successfully created");
+            $this->line('.env file successfully created');
         }
     }
-
 }
