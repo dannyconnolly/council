@@ -49,7 +49,9 @@
         </div><!-- /.level -->
     </div><!-- /.panel-heading -->
 
-    <div ref="question" class="panel-body" v-html="body"></div><!-- /.panel-body -->
+    <div ref="question" class="panel-body">
+        <highlight :content="body"></highlight>
+    </div><!-- /.panel-body -->
     
     <div class="panel-footer" v-if="authorize('owns', thread)">
         <button class="btn btn-xs" @click="editing = true">Edit</button>
