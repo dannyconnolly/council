@@ -2,6 +2,6 @@
 
 return [
     'administrators' => [
-        env('ADMINISTRATORS_EMAIL')
+        // Add the email addresses of users who should be administrators here.
     ]
 ];
