@@ -10,7 +10,6 @@ use App\Filters\ThreadFilters;
 
 class ThreadsController extends Controller
 {
-
     /**
      * ThreadsController constructor.
      */
@@ -66,10 +65,10 @@ class ThreadsController extends Controller
         ]);
 
         $thread = Thread::create([
-            'user_id' => auth()->id(),
-            'channel_id' => request('channel_id'),
-            'title' => request('title'),
-            'body' => request('body')
+                    'user_id' => auth()->id(),
+                    'channel_id' => request('channel_id'),
+                    'title' => request('title'),
+                    'body' => request('body')
         ]);
 
         if (request()->wantsJson()) {
@@ -132,8 +131,8 @@ class ThreadsController extends Controller
         $this->authorize('update', $thread);
 
         $thread->update(request()->validate([
-            'title' => 'required|spamfree',
-            'body' => 'required|spamfree',
+                    'title' => 'required|spamfree',
+                    'body' => 'required|spamfree',
         ]));
 
         return $thread;
@@ -158,5 +157,4 @@ class ThreadsController extends Controller
 
         return $threads->paginate(5);
     }
-
 }

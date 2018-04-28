@@ -11,7 +11,7 @@ class PinnedThreadsController extends Controller
      *
      * @param \App\Thread $thread
      */
-    public function store(Thread $thread)
+    public function store (Thread $thread)
     {
         $thread->update(['pinned' => true]);
     }
@@ -21,7 +21,7 @@ class PinnedThreadsController extends Controller
      *
      * @param \App\Thread $thread
      */
-    public function destroy(Thread $thread)
+    public function destroy (Thread $thread)
     {
         $thread->update(['pinned' => false]);
     }
