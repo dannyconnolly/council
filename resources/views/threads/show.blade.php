@@ -24,12 +24,18 @@
                             </p>
 
                             <p>
-                                <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
-                                
-                                <button class="btn btn-default" 
-                                        v-if="authorize('isAdmin')" 
-                                        @click="toggleLock" 
-                                        v-text="locked ? 'Unlock' : 'Lock'"></button>
+                            <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
+
+                            <button :class="classes(locked)"
+                                v-if="authorize('isAdmin')" 
+                                @click="toggleLock" 
+                                v-text="locked ? 'Unlock' : 'Lock'"></button>
+
+                            <button :class="classes(pinned)"
+                                v-if="authorize('isAdmin')"
+                                @click="togglePin"
+                                v-text="pinned ? 'Unpin' : 'Pin'"></button>
+
                             </p>
                         </div><!-- /.panel-body -->
                     </div><!-- /.panel panel-default -->

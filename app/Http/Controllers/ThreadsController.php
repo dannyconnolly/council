@@ -6,11 +6,11 @@ use App\Thread;
 use App\Channel;
 use App\Trending;
 use App\Rules\Recaptcha;
-use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
 
 class ThreadsController extends Controller
 {
+
     /**
      * ThreadsController constructor.
      */
@@ -35,8 +35,8 @@ class ThreadsController extends Controller
         }
 
         return view('threads.index', [
-            'threads'   => $threads,
-            'trending'  => $trending->get()
+            'threads' => $threads,
+            'trending' => $trending->get()
         ]);
     }
 
@@ -77,7 +77,7 @@ class ThreadsController extends Controller
         }
 
         return redirect($thread->path())
-            ->with('flash', 'Your thread has been published!');
+                        ->with('flash', 'Your thread has been published!');
     }
 
     /**
@@ -85,6 +85,7 @@ class ThreadsController extends Controller
      *
      * @param  int  $channel
      * @param  \App\Thread  $thread
+     * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
      */
     public function show($channel, Thread $thread, Trending $trending)
@@ -121,22 +122,10 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the given thread.
      *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Thread $thread)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
+     * @param string $channel
+     * @param Thread $thread
      */
     public function update($channel, Thread $thread)
     {
@@ -159,7 +148,9 @@ class ThreadsController extends Controller
      */
     public function getThreads(Channel $channel, ThreadFilters $filters)
     {
-        $threads = Thread::latest()->filter($filters);
+        $threads = Thread::orderBy('pinned', 'DESC')
+                ->latest()
+                ->filter($filters);
 
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
@@ -167,4 +158,5 @@ class ThreadsController extends Controller
 
         return $threads->paginate(5);
     }
+
 }

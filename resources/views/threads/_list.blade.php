@@ -5,14 +5,18 @@
                 <div class="flex">
                     <h4>
                         <a href="{{ $thread->path() }}">
+                            @if ($thread->pinned)
+                                <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+                            @endif
+
                             @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))
-                            <strong>{{ $thread->title }}</strong>
+                                <strong>{{ $thread->title }}</strong>
                             @else
-                            {{ $thread->title }}
+                                {{ $thread->title }}
                             @endif
                         </a>
                     </h4>
-                    
+
                     <h5>
                         Posted By: <a href="{{ route('profile', $thread->creator) }}">{{ $thread->creator->name }}</a>
                     </h5>
