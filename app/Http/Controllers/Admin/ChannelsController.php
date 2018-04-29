@@ -27,7 +27,7 @@ class ChannelsController extends Controller
     {
         return view('admin.channels.create', ['channel' => new Channel]);
     }
-    
+
     /**
      * Show the form to edit an existing channel.
      *
