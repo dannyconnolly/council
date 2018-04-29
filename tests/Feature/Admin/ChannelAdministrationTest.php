@@ -54,6 +54,24 @@ class ChannelAdministrationTest extends TestCase
                 ->assertSee('php')
                 ->assertSee('This is the channel for discussing all things PHP.');
     }
+    
+    /** @test */
+    public function an_administrator_can_edit_an_existing_channel()
+    {
+        $this->signInAdmin();
+        $channel = create('App\Channel');
+        $updated_data = [
+            'name' => 'altered',
+            'description' => 'altered channel description'
+        ];
+        $this->patch(
+            route('admin.channels.update', ['channel' => $channel->slug]), 
+            $updated_data
+        );
+        $this->get(route('admin.channels.index'))
+            ->assertSee($updated_data['name'])
+            ->assertSee($updated_data['description']);
+    }
 
     /** @test */
     public function a_channel_requires_a_name ()
