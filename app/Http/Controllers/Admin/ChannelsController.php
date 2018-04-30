@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Channel;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\Rule;
 
 class ChannelsController extends Controller
 {
@@ -28,7 +28,7 @@ class ChannelsController extends Controller
     {
         return view('admin.channels.create', ['channel' => new Channel]);
     }
-    
+
     /**
      * Show the form to edit an existing channel.
      *
