@@ -10,7 +10,6 @@ use App\Filters\ThreadFilters;
 
 class ThreadsController extends Controller
 {
-
     /**
      * ThreadsController constructor.
      */
@@ -158,5 +157,4 @@ class ThreadsController extends Controller
 
         return $threads->paginate(5);
     }
-
 }
