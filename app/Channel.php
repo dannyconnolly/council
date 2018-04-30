@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Channel extends Model
 {
     protected $guarded = [];
-    
+
     protected $casts = [
         'archived' => 'boolean'
     ];
@@ -31,12 +31,12 @@ class Channel extends Model
     {
         return $this->hasMany(Thread::class);
     }
-    
+
     public function archive()
     {
         $this->update(['archived' => true]);
     }
-    
+
     public function setNameAttributes($name)
     {
         $this->attributes['name'] = $name;
