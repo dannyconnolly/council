@@ -5,7 +5,7 @@
            aria-haspopup="true" 
            aria-expanded="false"
            @click.prevent="toggle = !toggle"
-        >
+       >
             Channels <span class="caret"></span>
         </a>
 
@@ -16,7 +16,7 @@
                        v-model="filter" 
                        placeholder="Filter Channels..."/>
             </div>
-            
+
             <ul class="list-group channel-list">
                 <li class="list-group-item" v-for="channel in filteredThreads">
                     <a :href="`/threads/${channel.slug}`" v-text="channel.name"></a>
@@ -30,7 +30,7 @@
     .channel-dropdown {
         padding:0;
     }
-    
+
     .input-wrapper {
         padding:.5rem 1rem;
     }
@@ -38,7 +38,7 @@
     .channel-list {
         max-height: 400px; overflow:auto;
         margin-bottom:0;
-        
+
         .list-group-item {
             border-radius:0;
             border-left: none;
@@ -49,19 +49,24 @@
 
 <script>
     export default {
-        props: ['channels'],
-
         data() {
             return {
+                channels: [],
                 toggle: false,
                 filter: ''
             }
         },
 
+        created() {
+            axios.get('/api/channels').then(({ data }) => (this.channels = data));
+        },
+
         computed: {
             filteredThreads() {
                 return this.channels.filter(channel => {
-                    return channel.name.toLowerCase().startsWith(this.filter.toLocaleLowerCase())
+                    return channel.name
+                            .toLowerCase()
+                            .startsWith(this.filter.toLocaleLowerCase())
                 });
             }
         }

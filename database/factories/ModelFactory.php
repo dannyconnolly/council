@@ -53,9 +53,10 @@ $factory->define(App\Channel::class, function (Faker $faker) {
     $name = $faker->word;
 
     return [
-       'name' => $name,
-       'slug' => $name,
-        'description' => $faker->sentence
+        'name' => $name,
+        'slug' => $name,
+        'description' => $faker->sentence,
+        'archived' => false
     ];
 });
 
