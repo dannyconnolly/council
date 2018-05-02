@@ -69,8 +69,8 @@ class ChannelAdministrationTest extends TestCase
         );
             
         $this->get(route('admin.channels.index'))
-            ->assertSee($updated_data['name'])
-            ->assertSee($updated_data['description']);
+            ->assertSee($updatedChannel['name'])
+            ->assertSee($updatedChannel['description']);
     }
     
     /** @test */
@@ -106,6 +106,19 @@ class ChannelAdministrationTest extends TestCase
     {
         $this->createChannel(['description' => null])
                 ->assertSessionHasErrors('description');
+    }
+    
+    /** @test */
+    public function archive_channel_should_not_influence_existing_thread()
+    {
+        $this->signInAdmin();
+        $channel = create('App\Channel');
+        $thread = create('App\Thread', ['channel_id' => $channel->id]);
+        $path = $thread->path();
+        $channel->update([
+            'archived' => true
+        ]);
+        $this->assertEquals($path, $thread->fresh()->path());
     }
 
     protected function createChannel ($overrides = [])

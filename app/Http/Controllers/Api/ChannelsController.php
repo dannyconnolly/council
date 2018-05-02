@@ -11,9 +11,9 @@ class ChannelsController extends Controller
      * Fetch all channels.
      */
     public function index()
-    {
-        return cache()->rememberForever('channels', function () {
-            return Channel::where('archived', false)->orderBy('name', 'asc')->get();
-        });
+    {       
+        //return cache()->rememberForever('channels', function () {
+            return Channel::all();
+        //});
     }
 }

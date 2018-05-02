@@ -47,7 +47,7 @@ class ThreadsController extends Controller
     public function create()
     {
         return view('threads.create', [
-            'channels' => Channel::where('archived', false)->orderBy('name', 'asc')->get()
+            'channels' => Channel::all()
         ]);
     }
 
@@ -67,10 +67,10 @@ class ThreadsController extends Controller
         ]);
 
         $thread = Thread::create([
-                    'user_id' => auth()->id(),
-                    'channel_id' => request('channel_id'),
-                    'title' => request('title'),
-                    'body' => request('body')
+            'user_id' => auth()->id(),
+            'channel_id' => request('channel_id'),
+            'title' => request('title'),
+            'body' => request('body')
         ]);
 
         if (request()->wantsJson()) {
@@ -149,14 +149,21 @@ class ThreadsController extends Controller
      */
     public function getThreads(Channel $channel, ThreadFilters $filters)
     {
-        $threads = Thread::orderBy('pinned', 'DESC')
-                ->latest()
-                ->filter($filters);
-
+//        $threads = Thread::orderBy('pinned', 'DESC')
+//                ->latest()
+//                ->filter($filters);
+//
+//        if ($channel->exists) {
+//            $threads->where('channel_id', $channel->id);
+//        }
+//
+//        return $threads->paginate(5);
+        
+        $threads = Thread::latest('pinned')->latest()->with('channel')->filter($filters);
+        
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
-
-        return $threads->paginate(5);
+        return $threads->paginate(25);
     }
 }
