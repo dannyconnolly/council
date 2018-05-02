@@ -1,14 +1,20 @@
 <template>
-    <div>
-        <div v-for="(reply, index) in items" :key="reply.id">
-            <reply :reply="reply" @deleted="remove(index)"></reply>
+    <div class="flex">
+        <div class="w-12 mr-4"></div>
+
+        <div class="flex-1">
+            <div v-for="(reply, index) in items" :key="reply.id">
+                <reply :reply="reply" @deleted="remove(index)"></reply>
+            </div>
+
+            <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+
+            <p v-if="$parent.locked">
+                This thread has been locked. No more replies are allowed.
+            </p>
+
+            <new-reply @created="add" v-else></new-reply>
         </div>
-
-        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
-        
-        <p v-if="$parent.locked">This thread has been locked. No new replies are allowed.</p>
-
-        <new-reply @created="add" v-else></new-reply>
     </div>
 </template>
 
@@ -36,7 +42,7 @@
             },
 
             url(page) {
-                if (!page) {
+                if (! page) {
                     let query = location.search.match(/page=(\d+)/);
 
                     page = query ? query[1] : 1;
