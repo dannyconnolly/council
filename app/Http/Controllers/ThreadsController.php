@@ -158,12 +158,13 @@ class ThreadsController extends Controller
 //        }
 //
 //        return $threads->paginate(5);
-        
+
         $threads = Thread::latest('pinned')->latest()->with('channel')->filter($filters);
-        
+
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
+
         return $threads->paginate(25);
     }
 }
