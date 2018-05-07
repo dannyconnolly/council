@@ -56,7 +56,8 @@ $factory->define(App\Channel::class, function (Faker $faker) {
         'name' => $name,
         'slug' => $name,
         'description' => $faker->sentence,
-        'archived' => false
+        'archived' => false,
+        'color' => $faker->hexcolor
     ];
 });
 
