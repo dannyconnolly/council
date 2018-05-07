@@ -1,5 +1,5 @@
-<nav class="text-xs mb-3">
-    <ol class="list-reset flex text-grey-dark">
+<nav class="text-xs bg-grey-darker text-white px-4 py-3 rounded rounded-b-none">
+    <ol class="list-reset flex text-grey-lighter">
         <li><a href="{{ route('threads') }}" class="text-blue font-bold">All Threads</a></li>
 
         @if (Route::is('channels'))
@@ -20,7 +20,7 @@
         @if (Route::is('threads.show'))
             <li><span class="mx-2">/</span></li>
             <li>
-                <a href="{{ route('channels', $thread->channel) }}">
+                <a href="{{ route('channels', $thread->channel) }}" class="text-blue-lighter font-bold">
                     {{ ucwords($thread->channel->name) }}
                 </a>
             </li>
