@@ -6,6 +6,11 @@ use App\Thread;
 
 class SearchController extends Controller
 {
+    /**
+     * Show the search results.
+     *
+     * @return mixed
+     */
     public function show()
     {
         if (request()->expectsJson()) {

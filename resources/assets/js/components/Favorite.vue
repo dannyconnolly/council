@@ -14,6 +14,7 @@
 <script>
     export default {
         props: ['reply'],
+
         data() {
             return {
                 count: this.reply.favoritesCount,
@@ -29,7 +30,7 @@
 
         methods: {
             toggle() {
-                this.active ? this.destroy() : this.create() 
+                this.active ? this.destroy() : this.create();
             },
 
             create() {

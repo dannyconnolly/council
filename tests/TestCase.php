@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use Illuminate\Support\Facades\DB;
 use App\Exceptions\Handler;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -15,8 +15,8 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        DB::statement('PRAGMA foreign_keys=on');
-        
+        DB::statement('PRAGMA foreign_keys=on;');
+
         $this->disableExceptionHandling();
     }
 
@@ -29,17 +29,18 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
-    public function signInAdmin($admin = null)
+    protected function signInAdmin($admin = null)
     {
         $admin = $admin ?: create('App\User');
 
-        config(['council.administrators' => [ $admin->email ]]);
-        
+        config(['council.administrators' => [$admin->email]]);
+
         $this->actingAs($admin);
 
         return $this;
     }
-    
+
+    // Hat tip, @adamwathan.
     protected function disableExceptionHandling()
     {
         $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);

@@ -29,15 +29,19 @@
     @yield('head')
 </head>
 
-<body class="font-sans bg-white">
+<body class="font-sans bg-grey-lighter">
     <div id="app">
         @include ('layouts.nav')
 
-        <div class="container">
+        <div class="container mx-auto">
             <div class="flex">
-                @include('sidebar')
+                @section('sidebar')
+                    @include('sidebar')
+                @show
 
-                @yield('content')
+                <div class="px-10 bg-white flex-1">
+                    @yield('content')
+                </div>
 
                  @include('channels-sidebar')
             </div>

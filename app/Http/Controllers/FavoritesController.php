@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
-use App\Favorite;
 
 class FavoritesController extends Controller
 {
@@ -24,7 +23,7 @@ class FavoritesController extends Controller
     {
         $reply->favorite();
 
-        return back();
+        $reply->owner->gainReputation('reply_favorited');
     }
 
     /**
@@ -35,5 +34,7 @@ class FavoritesController extends Controller
     public function destroy(Reply $reply)
     {
         $reply->unfavorite();
+
+        $reply->owner->loseReputation('reply_favorited');
     }
 }

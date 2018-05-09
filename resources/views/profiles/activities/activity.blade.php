@@ -4,10 +4,10 @@
             <span class="flex">
                 {{ $heading }}
             </span>
-        </div><!-- /.level -->
-    </div><!-- /.panel-heading -->
+        </div>
+    </div>
 
     <div class="panel-body">
         {{ $body }}
-    </div><!-- /.panel-body -->
-</div><!-- /.panel -->
+    </div>
+</div>

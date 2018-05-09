@@ -11,12 +11,17 @@ class PleaseConfirmYourEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The user associated with the email.
+     *
+     * @var \App\User
+     */
     public $user;
 
     /**
-     * Create a new message instance.
+     * Create a new mailable instance.
      *
-     * @return void
+     * @param \App\User $user
      */
     public function __construct($user)
     {
@@ -24,7 +29,7 @@ class PleaseConfirmYourEmail extends Mailable implements ShouldQueue
     }
 
     /**
-     * Build the message.
+     * Build the email.
      *
      * @return $this
      */
