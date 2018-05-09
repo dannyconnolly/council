@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use App\Channel;
-use Illuminate\Support\Facades\Schema;
+use App\Trending;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,21 +12,12 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Trending $trending)
     {
-        Schema::defaultStringLength(191);
-
-        // \View::share('channels', Channel::all());
-
-        \View::composer('*', function ($view) {
-            $channels = \Cache::rememberForever('channels', function () {
-                return Channel::all();
-            });
-
-            $view->with('channels', $channels);
-        });
-
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
+        
+        view()->share('channels', \App\Channel::all());
+        view()->share('trending', $trending->get());
     }
 
     /**
