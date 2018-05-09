@@ -3,14 +3,14 @@
         <div class="mr-4">
             <img src="{{ $thread->creator->avatar_path }}"
                      alt="{{ $thread->creator->username }}"
-                     class="w-8">
+                     class="w-8 h-8 bg-blue-darker rounded-full p-2">
         </div>
 
         <div class="flex-1 {{ $loop->last ? '' : 'border-b border-blue-lightest' }}">
             <h3 class="text-xl font-normal mb-2 tracking-tight">
                 <a href="{{ $thread->path() }}" class="text-blue">
                     @if ($thread->pinned)
-                        <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+                        Pinned:
                     @endif
 
                     @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))

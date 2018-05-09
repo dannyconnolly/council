@@ -122,6 +122,6 @@ class User extends Authenticatable
     {
         $avatar_path = $avatar ? 'storage/'.$avatar : false;
 
-        return asset($avatar_path ?: 'images/avatars/default.png');
+        return asset($avatar_path ?: 'images/avatars/default.svg');
     }
 }

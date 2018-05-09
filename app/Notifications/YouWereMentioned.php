@@ -56,8 +56,25 @@ class YouWereMentioned extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => $this->reply->owner->name.' mentioned you in '.$this->reply->thread->title,
+            'message' => $this->message(),
+            'notifier' => $this->user(),
             'link' => $this->reply->path()
         ];
+    }
+    
+    /**
+     * Get a message title for the notification.
+     */
+    public function message()
+    {
+        return sprintf('%s mentioned you in "%s"', $this->user()->username, $this->subject->title());
+    }
+    
+    /**
+     * Get the associated user for the subject.
+     */
+    public function user()
+    {
+        return $this->subject instanceof Reply ? $this->subject->owner : $this->subject->creator;
     }
 }
