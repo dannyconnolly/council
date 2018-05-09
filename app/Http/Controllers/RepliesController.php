@@ -19,20 +19,20 @@ class RepliesController extends Controller
     /**
      * Fetch all relevant replies.
      *
-     * @param int   $channelId
-     * @param Thread    $thread
+     * @param int    $channelId
+     * @param Thread $thread
      */
     public function index($channelId, Thread $thread)
     {
-        return $thread->replies()->paginate(5);
+        return $thread->replies()->paginate(20);
     }
 
     /**
      * Persist a new reply.
      *
-     * @param int           $channelId
-     * @param Thread            $thread
-     * @param CreatePostForm    $form
+     * @param  int           $channelId
+     * @param  Thread            $thread
+     * @param  CreatePostRequest $form
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function store($channelId, Thread $thread, CreatePostRequest $form)
@@ -51,15 +51,12 @@ class RepliesController extends Controller
      * Update an existing reply.
      *
      * @param Reply $reply
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        request()->validate(['body' => 'required|spamfree']);
-
-        $reply->update(request(['body']));
+        $reply->update(request()->validate(['body' => 'required|spamfree']));
     }
 
     /**

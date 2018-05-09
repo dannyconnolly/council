@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class UserTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
     public function a_user_can_fetch_their_most_recent_reply()
     {
@@ -28,6 +28,6 @@ class UserTest extends TestCase
 
         $user->avatar_path = 'avatars/me.jpg';
 
-        $this->assertEquals(asset('storage/avatars/me.jpg'), $user->avatar_path);
+        $this->assertEquals(asset('avatars/me.jpg'), $user->avatar_path);
     }
 }

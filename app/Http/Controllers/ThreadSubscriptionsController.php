@@ -7,11 +7,10 @@ use App\Thread;
 class ThreadSubscriptionsController extends Controller
 {
     /**
-     * Store a threads subscription.
+     * Store a new thread subscription.
      *
-     * @param int $channelId
+     * @param int    $channelId
      * @param Thread $thread
-     * @return
      */
     public function store($channelId, Thread $thread)
     {
@@ -19,11 +18,10 @@ class ThreadSubscriptionsController extends Controller
     }
 
     /**
-     * Delete a threads subscription.
+     * Delete an existing thread subscription.
      *
-     * @param int $channelId
+     * @param int    $channelId
      * @param Thread $thread
-     * @return
      */
     public function destroy($channelId, Thread $thread)
     {

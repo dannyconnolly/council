@@ -1,23 +1,23 @@
 <?php
 
-use Faker\Generator as Faker;
-
 /*
 |--------------------------------------------------------------------------
 | Model Factories
 |--------------------------------------------------------------------------
 |
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
+| Here you may define all of your model factories. Model factories give
+| you a convenient way to create models for testing and seeding your
+| database. Just tell the factory how a default model should look.
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
         'name' => $faker->name,
+        'username' => $faker->unique()->userName,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
@@ -31,7 +31,7 @@ $factory->state(App\User::class, 'unconfirmed', function () {
     ];
 });
 
-$factory->define(App\Thread::class, function (Faker $faker) {
+$factory->define(App\Thread::class, function ($faker) {
     $title = $faker->sentence;
 
     return [
@@ -42,26 +42,23 @@ $factory->define(App\Thread::class, function (Faker $faker) {
             return factory('App\Channel')->create()->id;
         },
         'title' => $title,
-        'body' => $faker->paragraph,
+        'body'  => $faker->paragraph,
         'visits' => 0,
         'slug' => str_slug($title),
         'locked' => false
     ];
 });
 
-$factory->define(App\Channel::class, function (Faker $faker) {
-    $name = $faker->unique()->word;
-
+$factory->define(App\Channel::class, function ($faker) {
     return [
-        'name' => $name,
-        'slug' => $name,
+        'name' => $faker->unique()->word,
         'description' => $faker->sentence,
         'archived' => false,
         'color' => $faker->hexcolor
     ];
 });
 
-$factory->define(App\Reply::class, function (Faker $faker) {
+$factory->define(App\Reply::class, function ($faker) {
     return [
         'thread_id' => function () {
             return factory('App\Thread')->create()->id;
@@ -69,11 +66,11 @@ $factory->define(App\Reply::class, function (Faker $faker) {
         'user_id' => function () {
             return factory('App\User')->create()->id;
         },
-        'body' => $faker->paragraph
+        'body'  => $faker->paragraph
     ];
 });
 
-$factory->define(\Illuminate\Notifications\DatabaseNotification::class, function (Faker $faker) {
+$factory->define(\Illuminate\Notifications\DatabaseNotification::class, function ($faker) {
     return [
         'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
         'type' => 'App\Notifications\ThreadWasUpdated',

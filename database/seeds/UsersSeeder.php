@@ -16,10 +16,10 @@ class UsersSeeder extends Seeder
 
         factory(User::class)
             ->create([
-                'name' => 'Admin',
-                'email' => 'admin@admin.com',
-                'password' => bcrypt('password'),
-                'confirmed' => 1
+                'name' => 'John Doe',
+                'username' => 'johndoe',
+                'email' => 'john@example.com',
+                'password' => bcrypt('password')
             ]);
     }
 }

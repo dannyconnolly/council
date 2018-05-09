@@ -22,7 +22,7 @@
                 page: 1,
                 prevUrl: false,
                 nextUrl: false
-            };
+            }
         },
 
         watch: {
@@ -51,7 +51,6 @@
             updateUrl() {
                 history.pushState(null, null, '?page=' + this.page);
             }
-
         }
     }
 </script>

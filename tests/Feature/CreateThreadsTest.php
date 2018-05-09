@@ -3,21 +3,22 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use Tests\TestCase;
 use App\Rules\Recaptcha;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class CreateThreadsTest extends TestCase
 {
-    use RefreshDatabase;
-    
-    public function setUp() 
+    use RefreshDatabase, MockeryPHPUnitIntegration;
+
+    public function setUp()
     {
         parent::setUp();
-        
+
         app()->singleton(Recaptcha::class, function () {
             return \Mockery::mock(Recaptcha::class, function ($m) {
-               $m->shouldReceive('passes')->andReturn(true); 
+                $m->shouldReceive('passes')->andReturn(true);
             });
         });
     }
@@ -35,7 +36,7 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
-    public function new_users_must_first_confirm_their_email_address_before_creating_threads()
+    function new_users_must_first_confirm_their_email_address_before_creating_threads()
     {
         $user = factory('App\User')->states('unconfirmed')->create();
 
@@ -50,9 +51,9 @@ class CreateThreadsTest extends TestCase
 
     /** @test */
     function a_user_can_create_new_forum_threads()
-    {       
+    {
         $response = $this->publishThread(['title' => 'Some Title', 'body' => 'Some body.']);
-        
+
         $this->get($response->headers->get('Location'))
             ->assertSee('Some Title')
             ->assertSee('Some body.');
@@ -71,20 +72,20 @@ class CreateThreadsTest extends TestCase
         $this->publishThread(['body' => null])
             ->assertSessionHasErrors('body');
     }
-    
+
     /** @test */
-    public function a_thread_requires_recaptcha_validation() 
+    function a_thread_requires_recaptcha_verification()
     {
         if ( Recaptcha::isInTestMode() ) {
             $this->markTestSkipped("Recaptcha is in test mode.");
         }
-        
+
         unset(app()[Recaptcha::class]);
-        
+
         $this->publishThread(['g-recaptcha-response' => 'test'])
             ->assertSessionHasErrors('g-recaptcha-response');
     }
-    
+
     /** @test */
     function a_thread_requires_a_valid_channel()
     {
@@ -98,13 +99,13 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_thread_requires_a_unique_slug()
+    function a_thread_requires_a_unique_slug()
     {
         $this->signIn();
 
         $thread = create('App\Thread', ['title' => 'Foo Title']);
 
-        $this->assertEquals($thread->fresh()->slug, 'foo-title');
+        $this->assertEquals($thread->slug, 'foo-title');
 
         $thread = $this->postJson(route('threads'), $thread->toArray() + ['g-recaptcha-response' => 'token'])->json();
 
@@ -112,15 +113,15 @@ class CreateThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug()
+    function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug()
     {
         $this->signIn();
 
-        $thread = create('App\Thread', ['title' => 'Foo Title 24']);
+        $thread = create('App\Thread', ['title' => 'Some Title 24']);
 
         $thread = $this->postJson(route('threads'), $thread->toArray() + ['g-recaptcha-response' => 'token'])->json();
 
-        $this->assertEquals("foo-title-24-{$thread['id']}", $thread['slug']);
+        $this->assertEquals("some-title-24-{$thread['id']}", $thread['slug']);
     }
 
     /** @test */
@@ -130,7 +131,7 @@ class CreateThreadsTest extends TestCase
 
         $thread = create('App\Thread');
 
-        $this->delete($thread->path())->assertRedirect(route('login'));
+        $this->delete($thread->path())->assertRedirect('/login');
 
         $this->signIn();
         $this->delete($thread->path())->assertStatus(403);
@@ -150,22 +151,21 @@ class CreateThreadsTest extends TestCase
 
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
         $this->assertEquals(0, Activity::count());
     }
-    
+
     /** @test */
-    function a_new_thread_cannot_be_created_in_an_archived_channel()
+    public function a_new_thread_cannot_be_created_in_an_archived_channel()
     {
-        $channel = create('App\Channel');
-        
-        $channel->archive();
-        
+        $channel = factory('App\Channel')->create(['archived' => true]);
+
         $this->publishThread(['channel_id' => $channel->id])
             ->assertSessionHasErrors('channel_id');
-        
+
         $this->assertCount(0, $channel->threads);
     }
-    
+
     protected function publishThread($overrides = [])
     {
         $this->withExceptionHandling()->signIn();

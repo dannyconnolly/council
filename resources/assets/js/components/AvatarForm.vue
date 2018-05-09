@@ -4,14 +4,15 @@
             <img :src="avatar" width="50" height="50" class="mr-1">
 
             <h1>
-                {{ user.name }}
+                {{ user.username }}
                 <small v-text="reputation"></small>
             </h1>
-        </div><!-- /.level -->
+        </div>
 
-            <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
-                <image-upload name="avatar" @loaded="onLoad"></image-upload>
-            </form>
+        <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
+            <image-upload name="avatar" class="mr-1" @loaded="onLoad"></image-upload>
+        </form>
+
     </div>
 </template>
 
@@ -25,7 +26,7 @@
 
         data() {
             return {
-                'avatar': this.user.avatar_path
+                avatar: this.user.avatar_path
             };
         },
 
@@ -33,9 +34,9 @@
             canUpdate() {
                 return this.authorize(user => user.id === this.user.id);
             },
-            
+
             reputation() {
-                return this.user.reputation + "XP";
+                return this.user.reputation + 'XP';
             }
         },
 
@@ -51,7 +52,7 @@
 
                 data.append('avatar', avatar);
 
-                axios.post('/api/users/${this.user.name}/avatar', data)
+                axios.post(`/api/users/${this.user.username}/avatar`, data)
                     .then(() => flash('Avatar uploaded!'));
             }
         }

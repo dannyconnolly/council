@@ -8,16 +8,22 @@ use App\Activity;
 class ProfilesController extends Controller
 {
     /**
-     * Show the users profile.
+     * Show the user's profile.
      *
-     * @param App\User $user
+     * @param  User $user
      * @return \Response
      */
     public function show(User $user)
     {
-        return view('profiles.show', [
+        $data = [
             'profileUser' => $user,
             'activities' => Activity::feed($user)
-        ]);
+        ];
+
+        if (request()->expectsJson()) {
+            return $data;
+        }
+
+        return view('profiles.show', $data);
     }
 }

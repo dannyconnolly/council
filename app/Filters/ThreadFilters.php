@@ -7,7 +7,7 @@ use App\User;
 class ThreadFilters extends Filters
 {
     /**
-     * Registerd filters to operate on.
+     * Registered filters to operate upon.
      *
      * @var array
      */
@@ -16,12 +16,12 @@ class ThreadFilters extends Filters
     /**
      * Filter the query by a given username.
      *
-     * @param $username
-     * @return $this;
+     * @param  string $username
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function by($username)
+    protected function by($username)
     {
-        $user = User::where('name', $username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
 
         return $this->builder->where('user_id', $user->id);
     }
@@ -29,16 +29,21 @@ class ThreadFilters extends Filters
     /**
      * Filter the query according to most popular threads.
      *
-     * @return $this;
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function popular()
+    protected function popular()
     {
         $this->builder->getQuery()->orders = [];
 
         return $this->builder->orderBy('replies_count', 'desc');
     }
 
-    public function unanswered()
+    /**
+     * Filter the query according to those that are unanswered.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function unanswered()
     {
         return $this->builder->where('replies_count', 0);
     }

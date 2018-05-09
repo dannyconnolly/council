@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Channel;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
 
 class ChannelsController extends Controller
 {
@@ -16,7 +15,7 @@ class ChannelsController extends Controller
      */
     public function index()
     {
-        $channels = Channel::withoutGlobalScopes()->orderBy('name', 'asc')->withCount('threads')->get();
+        $channels = Channel::withArchived()->with('threads')->get();
 
         return view('admin.channels.index', compact('channels'));
     }
@@ -73,14 +72,14 @@ class ChannelsController extends Controller
      */
     public function store()
     {
-        $data = request()->validate([
-            'name' => 'required|unique:channels',
-            'description' => 'required',
-        ]);
+        $channel = Channel::create(
+            request()->validate([
+                'name' => 'required|unique:channels',
+                'description' => 'required',
+            ])
+        );
 
-        $channel = Channel::create($data + ['slug' => str_slug($data['name'])]);
-
-        Cache::forget('channels');
+        cache()->forget('channels');
 
         if (request()->wantsJson()) {
             return response($channel, 201);

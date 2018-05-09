@@ -30,6 +30,9 @@ class Reply extends Model
      */
     protected $appends = ['favoritesCount', 'isFavorited', 'isBest'];
 
+    /**
+     * Boot the reply instance.
+     */
     protected static function boot()
     {
         parent::boot();
@@ -37,20 +40,20 @@ class Reply extends Model
         static::created(function ($reply) {
             $reply->thread->increment('replies_count');
 
-            Reputation::award($reply->owner, Reputation::REPLY_POSTED);
+            $reply->owner->gainReputation('reply_posted');
         });
 
         static::deleted(function ($reply) {
             $reply->thread->decrement('replies_count');
 
-            Reputation::reduce($reply->owner, Reputation::REPLY_POSTED);
+            $reply->owner->loseReputation('reply_posted');
         });
     }
 
     /**
      * A reply has an owner.
      *
-     * @return \Immuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function owner()
     {
@@ -58,15 +61,28 @@ class Reply extends Model
     }
 
     /**
-     * A reply has a thread.
+     * A reply belongs to a thread.
      *
-     * @return \Immuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function thread()
     {
         return $this->belongsTo(Thread::class);
     }
 
+    /**
+     * Get the related title for the reply.
+     */
+    public function title()
+    {
+        return $this->thread->title;
+    }
+
+    /**
+     * Determine if the reply was just published a moment ago.
+     *
+     * @return bool
+     */
     public function wasJustPublished()
     {
         return $this->created_at->gt(Carbon::now()->subMinute());
@@ -82,30 +98,48 @@ class Reply extends Model
         return $this->thread->path()."#reply-{$this->id}";
     }
 
-    public function mentionedUsers()
+    /**
+     * Access the body attribute.
+     *
+     * @param  string $body
+     * @return string
+     */
+    public function getBodyAttribute($body)
     {
-        preg_match_all('/@([\w\-]+)/', $this->body, $matches);
-
-        return $matches[1];
+        return \Purify::clean($body);
     }
 
+    /**
+     * Set the body attribute.
+     *
+     * @param string $body
+     */
     public function setBodyAttribute($body)
     {
-        $this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
+        $this->attributes['body'] = preg_replace(
+            '/@([\w\-]+)/',
+            '<a href="/profiles/$1">$0</a>',
+            $body
+        );
     }
 
+    /**
+     * Determine if the current reply is marked as the best.
+     *
+     * @return bool
+     */
     public function isBest()
     {
         return $this->thread->best_reply_id == $this->id;
     }
 
+    /**
+     * Determine if the current reply is marked as the best.
+     *
+     * @return bool
+     */
     public function getIsBestAttribute()
     {
         return $this->isBest();
-    }
-
-    public function getBodyAttribute($body)
-    {
-        return \Purify::clean($body);
     }
 }

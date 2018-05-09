@@ -1,4 +1,4 @@
-# Council [![Build Status](https://travis-ci.org/dannyconnolly/council.svg?branch=master)](https://travis-ci.org/dannyconnolly/council)
+# Council [![Build Status](https://travis-ci.org/JeffreyWay/council.svg?branch=master)](https://travis-ci.org/JeffreyWay/council)
 
 This is an open source forum that was built and maintained at Laracasts.com.
 
@@ -12,8 +12,6 @@ This is an open source forum that was built and maintained at Laracasts.com.
 
 ### Step 1
 
-> To run this project, you must have PHP 7 installed as a prerequisite.
-
 Begin by cloning this repository to your machine, and installing all Composer & NPM dependencies.
 
 ```bash
@@ -23,7 +21,7 @@ php artisan council:install
 npm run dev
 ```
 
-### Step 2.
+### Step 2
 
 Next, boot up a server and visit your forum. If using a tool like Laravel Valet, of course the URL will default to `http://council.test`. 
 
