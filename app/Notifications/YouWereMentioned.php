@@ -61,7 +61,7 @@ class YouWereMentioned extends Notification
             'link' => $this->reply->path()
         ];
     }
-    
+
     /**
      * Get a message title for the notification.
      */
@@ -69,7 +69,7 @@ class YouWereMentioned extends Notification
     {
         return sprintf('%s mentioned you in "%s"', $this->user()->username, $this->subject->title());
     }
-    
+
     /**
      * Get the associated user for the subject.
      */
