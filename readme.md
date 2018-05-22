@@ -1,4 +1,4 @@
-# Council [![Build Status](https://travis-ci.org/JeffreyWay/council.svg?branch=master)](https://travis-ci.org/JeffreyWay/council)
+# Council [![Build Status](https://travis-ci.org/dannyconnolly/council.svg?branch=master)](https://travis-ci.org/dannyconnolly/council)
 
 This is an open source forum that was built and maintained at Laracasts.com.
 
@@ -15,7 +15,7 @@ This is an open source forum that was built and maintained at Laracasts.com.
 Begin by cloning this repository to your machine, and installing all Composer & NPM dependencies.
 
 ```bash
-git clone git@github.com:JeffreyWay/council.git
+git clone git@github.com:dannyconnolly/council.git
 cd council && composer install && npm install
 php artisan council:install
 npm run dev
