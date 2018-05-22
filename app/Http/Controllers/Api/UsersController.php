@@ -7,12 +7,17 @@ use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
+    /**
+     * Fetch all relevant username.
+     *
+     * @return mixed
+     */
     public function index()
     {
-        $search = request('name');
+        $search = request('username');
 
-        return User::where('name', 'LIKE', "{$search}%")
+        return User::where('username', 'LIKE', "%$search%")
             ->take(5)
-            ->pluck('name');
+            ->pluck('username');
     }
 }

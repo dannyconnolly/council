@@ -13,9 +13,10 @@ class ProfilesTest extends TestCase
     public function a_user_has_a_profile()
     {
         $user = create('App\User');
-        
-        $this->get("/profiles/{$user->name}")
-            ->assertSee($user->name);
+
+        $response = $this->getJson("/profiles/{$user->username}")->json();
+
+        $this->assertEquals($response['profileUser']['name'], $user->name);
     }
 
     /** @test */
@@ -24,8 +25,8 @@ class ProfilesTest extends TestCase
         $this->signIn();
 
         $thread = create('App\Thread', ['user_id' => auth()->id()]);
-        
-        $this->get(route('profile', auth()->user()->name))
+
+        $this->get(route('profile', auth()->user()->username))
             ->assertSee($thread->title)
             ->assertSee($thread->body);
     }

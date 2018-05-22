@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Trending;
+use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TrendingThreadsTest extends TestCase
@@ -20,7 +20,7 @@ class TrendingThreadsTest extends TestCase
     }
 
     /** @test */
-    public function it_increments_a_thread_score_each_time_it_is_read()
+    public function it_increments_a_threads_score_each_time_it_is_read()
     {
         $this->assertEmpty($this->trending->get());
 

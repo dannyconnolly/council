@@ -12,8 +12,8 @@ class ChannelsController extends Controller
      */
     public function index()
     {
-        //return cache()->rememberForever('channels', function () {
-        return Channel::all();
-        //});
+        return cache()->rememberForever('channels', function () {
+            return Channel::all();
+        });
     }
 }

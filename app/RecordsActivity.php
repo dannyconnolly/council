@@ -48,6 +48,16 @@ trait RecordsActivity
     }
 
     /**
+     * Fetch the activity relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activity()
+    {
+        return $this->morphMany('App\Activity', 'subject');
+    }
+
+    /**
      * Determine the activity type.
      *
      * @param  string $event
@@ -58,15 +68,5 @@ trait RecordsActivity
         $type = strtolower((new \ReflectionClass($this))->getShortName());
 
         return "{$event}_{$type}";
-    }
-
-    /**
-     * Fetch the activity relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function activity()
-    {
-        return $this->morphMany('App\Activity', 'subject');
     }
 }

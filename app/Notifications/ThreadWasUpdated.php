@@ -2,27 +2,29 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
 class ThreadWasUpdated extends Notification
 {
-    use Queueable;
-
     /**
-     * @var
+     * The thread that was updated.
+     *
+     * @var \App\Thread
      */
     protected $thread;
 
     /**
-     * @var
+     * The new reply.
+     *
+     * @var \App\Reply
      */
     protected $reply;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param \App\Thread $thread
+     * @param \App\Reply  $reply
      */
     public function __construct($thread, $reply)
     {
@@ -33,35 +35,19 @@ class ThreadWasUpdated extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via()
     {
         return ['database'];
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray()
     {
         return [
             'message' => $this->reply->owner->name.' replied to '.$this->thread->title,

@@ -1,4 +1,4 @@
-This code of conduct is derived from the Ruby code of conduct. Any violations of the code of conduct may be reported to Danny Connolly (info@dannyconnolly.me).
+This code of conduct is derived from the Ruby code of conduct. Any violations of the code of conduct may be reported to Jeffrey Way (jeffrey@laracasts.com).
 
 - Participants will be tolerant of opposing views.
 

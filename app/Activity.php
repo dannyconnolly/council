@@ -16,7 +16,7 @@ class Activity extends Model
     /**
      * Fetch the associated subject for the activity.
      *
-     * @return \Illminate\Database\Eloquent\Relations\MorphTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function subject()
     {
@@ -30,7 +30,7 @@ class Activity extends Model
      * @param  int  $take
      * @return \Illuminate\Database\Eloquent\Collection;
      */
-    public static function feed($user, $take = 10)
+    public static function feed($user, $take = 50)
     {
         return static::where('user_id', $user->id)
             ->latest()

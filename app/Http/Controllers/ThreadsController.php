@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 class ThreadsController extends Controller
 {
     /**
-     * ThreadsController constructor.
+     * Create a new ThreadsController instance.
      */
     public function __construct()
     {
@@ -22,11 +22,12 @@ class ThreadsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Channel      $channel
+     * @param  Channel      $channel
      * @param ThreadFilters $filters
+     * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
+    public function index(Channel $channel, ThreadFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
 
@@ -36,7 +37,7 @@ class ThreadsController extends Controller
 
         return view('threads.index', [
             'threads' => $threads,
-            'trending' => $trending->get()
+            'channel' => $channel
         ]);
     }
 
@@ -55,7 +56,7 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Rules\Recaptcha  $recaptcha
+     * @param  \App\Rules\Recaptcha $recaptcha
      * @return \Illuminate\Http\Response
      */
     public function store(Recaptcha $recaptcha)
@@ -67,9 +68,9 @@ class ThreadsController extends Controller
                 'required',
                 Rule::exists('channels', 'id')->where(function ($query) {
                     $query->where('archived', false);
-                }),
+                })
             ],
-            'g-recaptcha-response' => ['required', $recaptcha]
+            // 'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
         $thread = Thread::create([
@@ -84,13 +85,13 @@ class ThreadsController extends Controller
         }
 
         return redirect($thread->path())
-                        ->with('flash', 'Your thread has been published!');
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $channel
+     * @param  int      $channel
      * @param  \App\Thread  $thread
      * @param \App\Trending $trending
      * @return \Illuminate\Http\Response
@@ -106,6 +107,24 @@ class ThreadsController extends Controller
         $thread->increment('visits');
 
         return view('threads.show', compact('thread'));
+    }
+
+    /**
+     * Update the given thread.
+     *
+     * @param string $channel
+     * @param Thread $thread
+     */
+    public function update($channel, Thread $thread)
+    {
+        $this->authorize('update', $thread);
+
+        $thread->update(request()->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]));
+
+        return $thread;
     }
 
     /**
@@ -129,42 +148,14 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Update the given thread.
-     *
-     * @param string $channel
-     * @param Thread $thread
-     */
-    public function update($channel, Thread $thread)
-    {
-        $this->authorize('update', $thread);
-
-        $thread->update(request()->validate([
-                    'title' => 'required|spamfree',
-                    'body' => 'required|spamfree',
-        ]));
-
-        return $thread;
-    }
-
-    /**
      * Fetch all relevant threads.
      *
      * @param Channel       $channel
      * @param ThreadFilters $filters
      * @return mixed
      */
-    public function getThreads(Channel $channel, ThreadFilters $filters)
+    protected function getThreads(Channel $channel, ThreadFilters $filters)
     {
-//        $threads = Thread::orderBy('pinned', 'DESC')
-//                ->latest()
-//                ->filter($filters);
-//
-//        if ($channel->exists) {
-//            $threads->where('channel_id', $channel->id);
-//        }
-//
-//        return $threads->paginate(5);
-
         $threads = Thread::latest('pinned')->latest()->with('channel')->filter($filters);
 
         if ($channel->exists) {

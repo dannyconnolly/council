@@ -4,18 +4,17 @@
             <div class="level">
                 <h5 class="flex">
                     <a href="{{ route('profile', $reply->owner) }}">
-                        {{ $reply->owner->name }}
-                    </a>
-                    said {{ $reply->created_at->diffForHumans() }}...
+                        {{ $reply->owner->username }}
+                    </a> said {{ $reply->created_at->diffForHumans() }}...
                 </h5>
 
-                @if(Auth::check())
+                @if (Auth::check())
                     <div>
                         <favorite :reply="{{ $reply }}"></favorite>
                     </div>
                 @endif
-            </div><!-- /.level -->
-        </div><!-- /.panel-heading -->
+            </div>
+        </div>
 
         <div class="panel-body">
             <div v-if="editing">
@@ -28,15 +27,13 @@
             </div>
 
             <div v-else v-text="body"></div>
-        </div><!-- /.panel-body -->
+        </div>
 
         @can ('update', $reply)
             <div class="panel-footer level">
-
                 <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
-                <button class="btn btn-xs btn-danger" @click="destroy">Delete</button>
-
-            </div><!-- /.panel-footer -->
+                <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
+            </div>
         @endcan
-    </div><!-- /.panel -->
+    </div>
 </reply>

@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ThreadsTest extends TestCase
+class ReadThreadsTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $thread;
 
     public function setUp()
     {
@@ -24,17 +26,16 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_a_single_thread()
+    function a_user_can_read_a_single_thread()
     {
         $this->get($this->thread->path())
             ->assertSee($this->thread->title);
     }
-    
+
     /** @test */
-    public function a_user_can_filter_threads_according_to_a_channel()
+    function a_user_can_filter_threads_according_to_a_channel()
     {
         $channel = create('App\Channel');
-
         $threadInChannel = create('App\Thread', ['channel_id' => $channel->id]);
         $threadNotInChannel = create('App\Thread');
 
@@ -44,20 +45,20 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_filter_threads_by_any_username()
+    function a_user_can_filter_threads_by_any_username()
     {
-        $this->signIn(create('App\User', ['name' => 'admin']));
+        $this->signIn(create('App\User', ['username' => 'JohnDoe']));
 
-        $threadByAdmin = create('App\Thread', ['user_id' => auth()->id()]);
-        $threadNotByAdmin = create('App\Thread');
+        $johnsThread = create('App\Thread', ['user_id' => auth()->id()]);
+        $janesThread = create('App\Thread');
 
-        $this->get('threads?by=admin')
-            ->assertSee($threadByAdmin->title)
-            ->assertDontSee($threadNotByAdmin->title);
+        $this->get('threads?by=JohnDoe')
+            ->assertSee($johnsThread->title)
+            ->assertDontSee($janesThread->title);
     }
 
     /** @test */
-    public function a_user_can_filter_threads_by_popularity()
+    function a_user_can_filter_threads_by_popularity()
     {
         $threadWithTwoReplies = create('App\Thread');
         create('App\Reply', ['thread_id' => $threadWithTwoReplies->id], 2);
@@ -73,7 +74,7 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_filter_threads_by_those_that_are_unanswered()
+    function a_user_can_filter_threads_by_those_that_are_unanswered()
     {
         $thread = create('App\Thread');
         create('App\Reply', ['thread_id' => $thread->id]);
@@ -84,10 +85,9 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_request_all_replies_for_a_given_thread()
+    function a_user_can_request_all_replies_for_a_given_thread()
     {
         $thread = create('App\Thread');
-
         create('App\Reply', ['thread_id' => $thread->id], 2);
 
         $response = $this->getJson($thread->path() . '/replies')->json();
@@ -97,7 +97,7 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function we_record_a_new_visit_each_time_a_thread_is_read()
+    function we_record_a_new_visit_each_time_the_thread_is_read()
     {
         $thread = create('App\Thread');
 

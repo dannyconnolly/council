@@ -2,38 +2,29 @@
 
 namespace Tests\Feature\Admin;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AdministratorTest extends TestCase
 {
-
     use RefreshDatabase;
 
-    public function setUp ()
+    /** @test */
+    public function an_administrator_can_access_the_administration_section()
     {
-        parent::setUp();
-
-        $this->withExceptionHandling();
+        $this->withExceptionHandling()
+            ->signInAdmin()
+            ->get(route('admin.dashboard.index'))
+            ->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
-    public function an_administrator_can_access_the_administration_section ()
+    public function a_non_administrator_cannot_access_the_administration_section()
     {
-        $this->signInAdmin()
-                ->get(route('admin.dashboard.index'))
-                ->assertStatus(Response::HTTP_OK);
+        $this->withExceptionHandling()
+            ->actingAs(create('App\User'))
+            ->get(route('admin.dashboard.index'))
+            ->assertStatus(Response::HTTP_FORBIDDEN);
     }
-
-    /** @test */
-    public function a_non_administrator_cannot_access_the_administration_section ()
-    {
-        $user = create('App\User');
-
-        $this->actingAs($user)
-                ->get(route('admin.dashboard.index'))
-                ->assertStatus(Response::HTTP_FORBIDDEN);
-    }
-
 }

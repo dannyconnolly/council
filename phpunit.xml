@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         bootstrap="bootstrap/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -12,12 +13,12 @@
         <testsuite name="Console Tests">
             <directory suffix="Test.php">./tests/Console</directory>
         </testsuite>
-        
-        <testsuite name="Feature">
+
+        <testsuite name="Feature Tests">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
 
-        <testsuite name="Unit">
+        <testsuite name="Unit Tests">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
@@ -34,5 +35,8 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="SCOUT_DRIVER" value="null"/>
+        <env name="ALGOLIA_APP_ID" value="null"/>
+        <env name="ALGOLIA_KEY" value="null"/>
+        <env name="ALGOLIA_SECRET" value="null"/>
     </php>
 </phpunit>
